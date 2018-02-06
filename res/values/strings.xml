@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RPGChat</string>
+    <string name="loading">Carregando...</string>
+
+    <string name="myprofile">Meu perfil</string>
+    <string name="about">Sobre este app</string>
+    <string name="logout">Sair</string>
+    <string name="menu">Menu</string>
+
+    <string name="profile">Ver perfil</string>
+    <string name="invite">Convidar para sala</string>
+    <string name="remove">Remover contato</string>
+    <string name="block">Bloquear</string>
+
+</resources>
