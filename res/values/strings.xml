@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">RPGChat</string>
     <string name="loading">Carregando...</string>
+    <string name="login">Login</string>
+    <string name="blocked">Bloqueados</string>
+    <string name="add">Solicitações</string>
+    <string name="profileName">Nome de usuário</string>
+    <string name="profileStatus">Status</string>
 
     <string name="myprofile">Meu perfil</string>
     <string name="about">Sobre este app</string>
