@@ -8,6 +8,7 @@
     <string name="profileStatus">Status</string>
 
     <string name="myprofile">Meu perfil</string>
+    <string name="chpass">Alterar senha</string>
     <string name="about">Sobre este app</string>
     <string name="logout">Sair</string>
     <string name="menu">Menu</string>
@@ -16,5 +17,17 @@
     <string name="invite">Convidar para sala</string>
     <string name="remove">Remover contato</string>
     <string name="block">Bloquear</string>
+
+    <string name="cadastrar">Cadastrar-se</string>
+    <string name="recuperar">Esqueceu a senha?</string>
+    <string name="mail">E-mail</string>
+    <string name="user">Usuário</string>
+    <string name="pass">Senha</string>
+    <string name="conpass">Confirmar senha</string>
+    <string name="loginmail">E-mail/Nome de usuário</string>
+
+    <string name="search">Procurar</string>
+    <string name="accept">Aceitar contatos</string>
+    <string name="roomname">Nome da sala</string>
 
 </resources>
