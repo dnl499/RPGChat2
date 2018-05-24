@@ -1,19 +1,17 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">RPGChat</string>
-    <string name="loading">Carregando...</string>
+    <string name="loading">Carregando…</string>
     <string name="login">Login</string>
     <string name="blocked">Bloqueados</string>
     <string name="add">Solicitações</string>
     <string name="profileName">Nome de usuário</string>
     <string name="profileStatus">Status</string>
 
-    <string name="myprofile">Meu perfil</string>
     <string name="chpass">Alterar senha</string>
     <string name="about">Sobre este app</string>
     <string name="logout">Sair</string>
     <string name="menu">Menu</string>
 
-    <string name="profile">Ver perfil</string>
     <string name="invite">Convidar para sala</string>
     <string name="remove">Remover contato</string>
     <string name="block">Bloquear</string>
@@ -30,4 +28,28 @@
     <string name="accept">Aceitar contatos</string>
     <string name="roomname">Nome da sala</string>
 
+    <string name="rpgmode">RPG Mode</string>
+    <string name="closechat">Fechar mensagens</string>
+
+    <string name="license0" tools:ignore="Typos">
+        Esse aplicativo (RPGChat), até o momento, é um projeto puramente didático e com o objeto de aplicar meus conhecimentos.
+        Em casos futuros aonde haja demanda de seus serviços, ele poderá ter um caráter profissional.
+    </string>
+    <string name="license1">
+        Copyright (&#169;) 2018 Daniel Barros Da Silva (dnl499)
+    </string>
+    <string name="license2">
+        Esse programa é um software livre: você pode redistribuí-lo e/ou modificalo sob os termos GNU (General Public License -
+        Licensa Pública Geral como publicado por Free Software Foundation (Fundação de Software Livre), tanta como a versão 3 da
+        Licensa ou posterior (A sua escolha).
+    </string>
+    <string name="license3">
+        Esse programa é distribuído com a esperança de ser útil,
+        mas NÃO HÁ GARANTIAS; sem a garantia implicada de
+        MERCANTILIDADE ou COMPATIBILIDADE PARA UM PROPÓSITO ESPECIFICO. Veja a
+        Licensa Pública Geral (GNU General Public License) para mais detalhes.
+    </string>
+    <string name="license4">
+        Você poderá encontrar a Licensa GNU no site: https://www.gnu.org/licenses/.
+    </string>
 </resources>

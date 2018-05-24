@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/myprofile"/>
-    <item android:title="@string/chpass"/>
-    <item android:title="@string/about"/>
+    <item
+        android:onClick="changePassword"
+        android:title="@string/chpass" />
+    <item
+        android:onClick="about"
+        android:title="@string/about" />
     <item android:title="@string/logout"/>
 
 </menu>

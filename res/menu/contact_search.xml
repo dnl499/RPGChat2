@@ -6,5 +6,8 @@
 
     <item android:title="@string/accept"
         android:onClick="contactAcc"/>
+    <item
+        android:onClick="blocked"
+        android:title="@string/blocked" />
 
 </menu>

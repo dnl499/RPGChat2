@@ -1,10 +1,13 @@
 package net.net16.httpschaos_workbench.rpgchat.main_activity_classes;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
@@ -30,9 +33,12 @@ public class MainInterfaceButtonsOnClickListener implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.animator.onclick);
+        set.setTarget(view);
+        set.start();
         switch (view.getId()) {
             case R.id.main_pic:
-                changeProfilePicture();
+                changeProfilePicture(view);
                 break;
             case R.id.main_menu:
                 PopupMenu menu = new PopupMenu(activity, view);
@@ -76,6 +82,11 @@ public class MainInterfaceButtonsOnClickListener implements View.OnClickListener
                         .setNegativeButton("Cancelar", null)
                         .show();
                 break;
+            case R.id.chat_opt:
+                PopupMenu menu2 = new PopupMenu(activity, view);
+                menu2.getMenuInflater().inflate(R.menu.chat_menu, menu2.getMenu());
+                menu2.show();
+                break;
         }
     }
 
@@ -88,7 +99,13 @@ public class MainInterfaceButtonsOnClickListener implements View.OnClickListener
         };
     }
 
-    private void changeProfilePicture() {
+    private void changeProfilePicture(View view) {
+        new AlertDialog.Builder(activity)
+                .setMessage("A imagem é um URL ou está no celular?")
+                .setPositiveButton("URL", new InternetProfilePicture(activity, (ImageView) view))
+                .setNeutralButton("Escolher do celular", new InternalImageSelector(activity, (ImageView) view))
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     private void searchRooms() {

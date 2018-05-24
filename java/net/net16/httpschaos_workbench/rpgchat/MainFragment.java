@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,7 +71,7 @@ public class MainFragment extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
-        statusRef = database.getReference("Users/"+ user.getDisplayName()+"/public/status");
+        statusRef = database.getReference("Users/"+ user.getDisplayName()+"/Public/Status");
         username.setText(user.getDisplayName());
         if (user.getPhotoUrl() != null) {
             new Thread(new ImageDownloader(getActivity(), user.getPhotoUrl().toString(), picture)).start();
@@ -79,12 +80,17 @@ public class MainFragment extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String a = "" + dataSnapshot.getValue(String.class);
-                if (a.isEmpty()) {
+                if (dataSnapshot.getValue(String.class) == null) {
                     statusRef.setValue("Status");
                     status.setText("Status");
+
                 } else {
-                    status.setText(dataSnapshot.getValue(String.class));
+                    String a = "" + dataSnapshot.getValue(String.class);
+                    if (a.isEmpty()) {
+                        statusRef.setValue("Status");
+                        status.setText("Status");
+
+                    } else status.setText(dataSnapshot.getValue(String.class));
                 }
             }
 

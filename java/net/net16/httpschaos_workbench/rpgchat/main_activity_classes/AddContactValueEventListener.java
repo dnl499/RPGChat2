@@ -70,8 +70,8 @@ public class AddContactValueEventListener implements ValueEventListener {
                                 String uName = user.getDisplayName();
                                 String contact = contacts.getItem(i);
 
-                                DatabaseReference contactRef = database.getReference("Users/" + uName + "/Private/Blocked/Username");
-                                contactRef.setValue(contact);
+                                DatabaseReference contactRef = database.getReference("Users/" + uName + "/Private/Blocked/"+contact);
+                                contactRef.setValue("");
 
                                 DatabaseReference nContactReference = database.getReference("Users/" + uName + "/Private/NContact/" + contact);
                                 nContactReference.removeValue();

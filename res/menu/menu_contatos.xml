@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/profile"/>
     <item android:title="@string/invite"/>
-    <item android:title="@string/remove"/>
-    <item android:title="@string/block"/>
+    <item
+        android:onClick="longRemoveCon"
+        android:title="@string/remove" />
+    <item
+        android:onClick="longBlock"
+        android:title="@string/block" />
 
 </menu>

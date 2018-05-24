@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/cha_pic"
+            android:id="@+id/chat_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused"
@@ -22,7 +22,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            tools:ignore="InefficientWeight">
 
             <TextView
                 android:id="@+id/chat_username"
@@ -30,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=""
-                tools:ignore="InefficientWeight" />
+                tools:ignore="InefficientWeight,NestedWeights" />
 
             <TextView
                 android:id="@+id/chat_status"
@@ -40,18 +42,26 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/chat_opt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@mipmap/ic_dehaze_white_48dp"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/chat_messages"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:ignore="InefficientWeight" />
+        tools:ignore="InefficientWeight">
+
+        <LinearLayout
+            android:id="@+id/chat_messages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="UselessLeaf" />
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,9 +69,11 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/chat_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
             app:srcCompat="@android:drawable/ic_media_play"
             tools:ignore="ContentDescription" />
 

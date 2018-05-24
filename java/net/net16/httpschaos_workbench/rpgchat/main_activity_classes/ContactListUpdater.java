@@ -22,15 +22,17 @@ import net.net16.httpschaos_workbench.rpgchat.R;
 
 public class ContactListUpdater implements ValueEventListener {
     private Activity activity;
+    private ListView contactList;
 
     public ContactListUpdater(Activity activity) {
+        contactList = activity.findViewById(R.id.contact_list);
         this.activity = activity;
     }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         final ArrayAdapter<String> contactListAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1);
-        ListView contactList = activity.findViewById(R.id.contact_list);
+        SelectedContact.setAdapter(contactListAdapter);
         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
             final String[] res = {dataSnapshot1.getKey(), ""};

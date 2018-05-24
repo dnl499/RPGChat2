@@ -3,6 +3,8 @@ package net.net16.httpschaos_workbench.rpgchat.login_methods;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -27,9 +29,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import net.net16.httpschaos_workbench.rpgchat.LoginActivity;
 import net.net16.httpschaos_workbench.rpgchat.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Daniel on 16/02/2018.
@@ -86,6 +97,10 @@ public class GoogleLogin implements View.OnClickListener{
                                         String r = dataSnapshot.getValue(String.class);
                                         final EditText username = new EditText(activity);
                                         alertDialog.dismiss();
+
+                                        // This AlertDialog is called when the app don't detect the presence of an correspondent mail
+                                        // on the Firebase and thus assumes it is the user's first login through the google account
+                                        // and asks for an username.
                                         AlertDialog d = new AlertDialog.Builder(activity)
                                                 .setTitle("Logando pela primeira vez? Escolha um nome de usuário.")
                                                 .setView(username)
@@ -98,10 +113,12 @@ public class GoogleLogin implements View.OnClickListener{
                                                             @Override
                                                             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                                                                // This loop will run through all the usernames and invalidates the
+                                                                // choosen username, if there is someone already using it.
                                                                 boolean valid = true;
                                                                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
-                                                                    //noinspection EqualsBetweenInconvertibleTypes
-                                                                    if (user.equals(dataSnapshot1.getKey())) {
+                                                                    assert user.getDisplayName() != null;
+                                                                    if (user.getDisplayName().equals(dataSnapshot1.getKey())) {
                                                                         valid = false;
                                                                         break;
                                                                     }
@@ -109,6 +126,7 @@ public class GoogleLogin implements View.OnClickListener{
                                                                 if (valid) {
 
                                                                     alertDialog = new AlertDialog.Builder(activity).setTitle("Atualizando perfil").setView(R.layout.loading).show();
+                                                                    // This will change the DisplayName to the username (It won't affect the google account, only the firebase account).
                                                                     user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(username.getText().toString()).build()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
                                                                         public void onSuccess(Void aVoid) {
@@ -116,11 +134,37 @@ public class GoogleLogin implements View.OnClickListener{
                                                                             mailRef.setValue(user.getEmail());
                                                                             DatabaseReference uidRef = FirebaseDatabase.getInstance().getReference("Users/" + user.getDisplayName() + "/uid");
                                                                             uidRef.setValue(user.getUid());
+
                                                                             Intent i = new Intent("net.net16.httpschaos_workbench.rpgchat.MAIN_SCREEN");
                                                                             alertDialog.dismiss();
                                                                             activity.startActivity(i);
                                                                         }
                                                                     });
+
+                                                                    new Thread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            // Here the profile picture will be stored in the FirebaseStorage
+                                                                            // as it'll be impossible to get the URL from other users.
+                                                                            try {
+                                                                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                                                                StorageReference profilePic = storage.getReference("Users/" + user.getDisplayName() + "/Profile Picture");
+                                                                                assert user.getPhotoUrl() != null;
+                                                                                URL url = new URL(user.getPhotoUrl().toString());
+                                                                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                                                                conn.setDoInput(true);
+                                                                                InputStream is = conn.getInputStream();
+                                                                                Bitmap img = BitmapFactory.decodeStream(is);
+                                                                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                                                                img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                                                                profilePic.putBytes(baos.toByteArray());
+                                                                            } catch (MalformedURLException e) {
+                                                                                e.printStackTrace();
+                                                                            } catch (IOException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                        }
+                                                                    }).start();
 
                                                                 } else Toast.makeText(activity, "Esse nome de usuário já existe", Toast.LENGTH_SHORT).show();
                                                             }

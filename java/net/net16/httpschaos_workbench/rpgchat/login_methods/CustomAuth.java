@@ -3,6 +3,8 @@ package net.net16.httpschaos_workbench.rpgchat.login_methods;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,8 +25,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import net.net16.httpschaos_workbench.rpgchat.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Daniel on 16/02/2018.
@@ -100,7 +112,8 @@ public class CustomAuth implements View.OnClickListener {
                                 alertDialog = new AlertDialog.Builder(activity).setTitle("Validando usuário").setView(R.layout.loading).show();
 
                                 boolean valid = true;
-                                // This for loops for all usernames and invalidates in case there is someone with the same username (Or the username is empty)
+                                // This for loops for all usernames and invalidates in case there is someone with the same
+                                // username (Or the username is empty)
                                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
                                     if (dataSnapshot1.getKey().equals(user) || user.isEmpty()) {
                                         valid = false;
@@ -120,7 +133,7 @@ public class CustomAuth implements View.OnClickListener {
                                                 mAuth.signInWithEmailAndPassword(mail, pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                                     @Override
                                                     public void onSuccess(AuthResult authResult) {
-                                                        FirebaseUser fuser = authResult.getUser();
+                                                        final FirebaseUser fuser = authResult.getUser();
                                                         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                                                         // Here we post the mail and uid in the Firebase database for future uses
@@ -138,6 +151,30 @@ public class CustomAuth implements View.OnClickListener {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
 
+                                                                new Thread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        // Here the profile picture will be stored in the FirebaseStorage
+                                                                        // as it'll be impossible to get the URL from other users.
+                                                                        try {
+                                                                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                                                                            StorageReference profilePic = storage.getReference("Users/" + user + "/Profile Picture");
+                                                                            URL url = new URL("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png");
+                                                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                                                            conn.setDoInput(true);
+                                                                            InputStream is = conn.getInputStream();
+                                                                            Bitmap img = BitmapFactory.decodeStream(is);
+                                                                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                                                            img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                                                            profilePic.putBytes(baos.toByteArray());
+                                                                        } catch (MalformedURLException e) {
+                                                                            e.printStackTrace();
+                                                                        } catch (IOException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }).start();
+
                                                                 // For avoiding Nullpoints in the MainScreen, the main Activity is only
                                                                 // called after the profile update is complete.
                                                                 Intent intent = new Intent("net.net16.httpschaos_workbench.rpgchat.MAIN_SCREEN");
@@ -146,6 +183,12 @@ public class CustomAuth implements View.OnClickListener {
                                                         });
                                                     }
                                                 });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                alertDialog.dismiss();
+                                                Toast.makeText(activity, "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                             }
                                         });
 
@@ -176,7 +219,7 @@ public class CustomAuth implements View.OnClickListener {
     }
 
     /**
-     * This one methos will inflate an AlertDialog with the login form and an option for the autoLogin()
+     * This one method will inflate an AlertDialog with the login form and an option for the autoLogin()
      * The autoLogin will login with the default user from the last credential from the app (This include the google account).
      * The autoLogin is the fastest way to login and the users will be advised about it.
      */
@@ -217,11 +260,12 @@ public class CustomAuth implements View.OnClickListener {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                EditText username = alertDialog.findViewById(R.id.login_mail);
+                final EditText password = alertDialog.findViewById(R.id.login_pass);
+
                 alertDialog.dismiss();
                 alertDialog = new AlertDialog.Builder(activity).setTitle("Carregando").setView(R.layout.loading).show();
 
-                EditText username = alertDialog.findViewById(R.id.login_mail);
-                final EditText password = alertDialog.findViewById(R.id.login_pass);
                 if (username != null && password != null) { // Asserts the EditTexts aren't null (They never are though).
                     // Asserts the username and passowrds aren't empty.
                     if (!username.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
@@ -271,9 +315,15 @@ public class CustomAuth implements View.OnClickListener {
                             });
                         }
 
-                    } else Toast.makeText(activity, "Senha ou nome de usuário vazio", Toast.LENGTH_SHORT).show();
+                    } else {
+                        alertDialog.dismiss();
+                        Toast.makeText(activity, "Senha ou nome de usuário vazio", Toast.LENGTH_SHORT).show();
+                    }
 
-                } else Toast.makeText(activity, "Senha ou nome de usuário vazio", Toast.LENGTH_SHORT).show();
+                } else {
+                    alertDialog.dismiss();
+                    Toast.makeText(activity, "Senha ou nome de usuário vazio", Toast.LENGTH_SHORT).show();
+                }
             }
         };
     }
