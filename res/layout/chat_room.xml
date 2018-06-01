@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/room_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/room_configs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_cogs_white_48dp"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/room_participants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_account_white_48dp"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/room_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_book_open_variant_white_48dp"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/room_sheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_clipboard_text_white_48dp"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/room_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_checkerboard_white_48dp"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/room_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_dots_vertical_white_48dp"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:ignore="InefficientWeight">
+
+        <LinearLayout
+            android:id="@+id/room_messages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="UselessLeaf" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/room_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_media_play"
+            tools:ignore="ContentDescription,InefficientWeight" />
+
+        <EditText
+            android:id="@+id/room_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            tools:ignore="InefficientWeight" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_gallery"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+</LinearLayout>

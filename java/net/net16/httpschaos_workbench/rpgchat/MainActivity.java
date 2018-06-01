@@ -63,11 +63,7 @@ public class MainActivity extends AppCompatActivity {
         chatOpt.setOnClickListener(new MainInterfaceButtonsOnClickListener(this));
         root.removeView(chatFragment);
         contactList = findViewById(R.id.contact_list);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         contactList.setOnItemClickListener(new ContactListOnItemClickListener(this, chatFragment));
         contactList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

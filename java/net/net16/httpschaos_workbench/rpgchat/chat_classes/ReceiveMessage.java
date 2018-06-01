@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import net.net16.httpschaos_workbench.rpgchat.R;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -41,20 +42,15 @@ public class ReceiveMessage implements ValueEventListener {
 
         for (DataSnapshot data: dataSnapshot.getChildren()) {
             String b = "" + data.getValue(String.class);
-            Date date = new Date();
-            date.setTime((-1)*Long.parseLong(data.getKey()));
-            DateFormat format = DateFormat.getDateInstance();
-            TextView neo = new TextView(activity);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(metrics.widthPixels/20, 0, metrics.widthPixels/20, metrics.heightPixels/50);
-            neo.setLayoutParams(params);
-            neo.setBackgroundColor(0xAA606090);
-            neo.setText(Html.fromHtml(format.format(date) + " - " + b.split("\t")[0]));
-            if (b.contains("\tme")) {
-                neo.setGravity(Gravity.END);
-                neo.setPadding(metrics.widthPixels/10, 10, metrics.widthPixels/50, 10);
-            } else neo.setPadding(metrics.widthPixels/50, 10, metrics.widthPixels/10, 10);
-            messageList.addView(neo);
+
+            Calendar cal = Calendar.getInstance();
+
+            MessageHolder mh;
+            if (b.contains("\tme")) mh = new MessageHolder(activity, true);
+            else mh = new MessageHolder(activity, false);
+            mh.setMessage(b.split("\t")[0]);
+            mh.setDate(cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + " (" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + " de " + cal.get(Calendar.YEAR) + ")");
+            messageList.addView(mh.getView());
         }
     }
 
